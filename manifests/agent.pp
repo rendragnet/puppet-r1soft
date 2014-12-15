@@ -41,7 +41,7 @@ class idera::agent($idera_server_ip = '0', $idera_server_port = '1167', $idera_s
 	}
 	
 	# open the right port
-	if $manage_csf == true {
+	if defined(Class['csf']) {
 		csf::ipv4::input { $idera_server_port: }
 	}
 }
