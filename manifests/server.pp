@@ -86,9 +86,9 @@ class idera::server(
 		require => Package['serverbackup-enterprise'],
 	}
 
-	if $manage_csf == true {
+	if defined(Class['csf']) {
 		# enable some ports, such as the API port etc.
-		csf::ipv4::input { [ $ssl_port, $http_port, $com_port, '1167' ]: }
+		csf::ipv4::input { [ $ssl_port, $http_port, $com_port, '1167', '9443' ]: }
 		csf::ipv4::output { [ '1167', '3306' ]: }
 	}
 }
