@@ -1,4 +1,4 @@
-class idera($manage_csf = false) { 
+class idera { 
 	case $operatingsystem {
 		redhat, centos: {
 			yumrepo { 'idera':

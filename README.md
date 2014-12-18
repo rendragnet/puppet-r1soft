@@ -17,10 +17,10 @@ The ssl_keystore value expects you to manage that file yourself. It doesn't
 do that for you yet.
 
 ```
-class { 'idera': manage_csf => true }
+class { 'idera': }
 ```
 
-If you set it to manage CSF you need our CSF module too.
+It will automatically pick up support for the CSF module if needed.
 
 ```
 class { 'idera::server':
