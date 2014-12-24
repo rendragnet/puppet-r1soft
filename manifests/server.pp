@@ -35,9 +35,18 @@ class idera::server(
 	
 ) inherits idera {
 	# make sure the package is installed
-	package { 'serverbackup-enterprise': 
-		ensure => installed,
-		require => Yumrepo['idera'],
+	case $operatingsystem {
+		redhat, centos: {
+			package { 'serverbackup-enterprise': 
+				ensure => installed,
+				require => Yumrepo['idera'],
+			}
+		}
+		debian, ubuntu: {
+			package { 'serverbackup-enterprise': 
+				ensure => installed,
+			}
+		}
 	}
  
  	# set up our configurations

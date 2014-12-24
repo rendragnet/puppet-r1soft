@@ -6,6 +6,7 @@
 	"summary": "An Idera management module",
 	"source": "https://github.com/sensson/sensson-idera",
 	"dependencies": [
-		{ "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2" }
+		{ "name": "puppetlabs/stdlib", "version_requirement": ">=4.3.2" },
+		{ "name": "puppetlabs/apt", "version_requirement": ">=1.7.0" }
 	]
 }
