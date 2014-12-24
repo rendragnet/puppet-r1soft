@@ -24,21 +24,25 @@ class idera::agent($idera_server_ip = '0', $idera_server_port = '1167', $idera_s
 		
 		# only do this if its a physical server
 		if $idera_server_ip != 0 {
-			if $virtual == 'openvzhn' {
-				if $operatingsystem == 'CentOS' and $operatingsystemmajrelease == '5' {
-					$kerneldevel = "ovzkernel-devel"			
+			if $operatingsystem == 'CentOS' {
+				if $virtual == 'openvzhn' { 
+					if $operatingsystemmajrelease == '5' {
+						$kerneldevel = "ovzkernel-devel"			
+					}
+					else {
+						$kerneldevel = "vzkernel-devel"
+					}
 				}
 				else {
-					$kerneldevel = "vzkernel-devel"
+					$kerneldevel = "kernel-devel"
+				}
+				
+				package { [ "$kerneldevel" ]:
+					ensure 		=> installed,
+					before		=> [ Exec['idera-get-module'], Exec['idera-get-key'] ],
 				}
 			}
-			else {
-				$kerneldevel = "kernel-devel"
-			}
-		
-			package { [ "$kerneldevel" ]:
-				ensure 		=> installed,
-			} ->
+
 			exec { 'idera-get-module':
 				command 	=> "/usr/bin/serverbackup-setup --get-module; /sbin/service cdp-agent restart",
 				unless		=> "/sbin/lsmod | grep -q 'hcpdriver'",
