@@ -1,9 +1,18 @@
 class idera::agent($idera_server_ip = '0', $idera_server_port = '1167', $idera_server_https = 'off') inherits idera {
 	# make sure this doesn't get installed on openvz containers, there's no support for that in idera
 	if $virtual != "openvz" {
-		package { 'serverbackup-enterprise-agent':
-			ensure 	=> installed,
-			require => Yumrepo['idera'],
+		case $operatingsystem {
+			redhat, centos: {
+				package { 'serverbackup-enterprise-agent':
+					ensure => installed,
+					require => Yumrepo['idera'],
+				}
+			}
+			debian, ubuntu: {
+				package { 'serverbackup-enterprise-agent': 
+					ensure => installed,
+				}
+			}
 		}
 		
 		if $idera_server_https == 'off' {
