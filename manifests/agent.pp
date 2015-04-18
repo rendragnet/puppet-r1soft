@@ -11,6 +11,7 @@ class idera::agent($idera_server_ip = '0', $idera_server_port = '1167', $idera_s
 			debian, ubuntu: {
 				package { 'serverbackup-enterprise-agent': 
 					ensure => installed,
+					require => [ Apt::Source['idera'], Exec['apt_update'], ]
 				}
 			}
 		}
