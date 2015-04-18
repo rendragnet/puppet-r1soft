@@ -2,10 +2,6 @@
 
 This module can install both an Idera server as an Idera agent.
 
-## Prerequisites
-
-This module depends on CSF on both the agent as the server side.
-
 ## Examples
 
 Install the Idera server. There are a lot of options available. Please note
@@ -19,6 +15,8 @@ do that for you yet.
 ```
 class { 'idera': }
 ```
+
+## Server setup
 
 It will automatically pick up support for the CSF module if needed.
 
@@ -37,7 +35,36 @@ class { 'idera::server':
 }
 ```
 
-Or if you want to use the agent.
+It's recommended to use puppetlabs/java_ks to manage your keystore. An
+example of its use can be found below:
+
+```
+package { 'idera-java':
+	name			=> $::idera::java_package,
+	ensure 			=> installed,
+} ->
+java_ks { 'idera:truststore':
+	ensure       	=> latest,
+	certificate  	=> '/usr/sbin/r1soft/data/server.pem',
+	private_key		=> '/usr/sbin/r1soft/data/server.key',
+	target       	=> '/usr/sbin/r1soft/conf/keystore',
+	password     	=> 'password',
+	trustcacerts 	=> true,
+	require 		=> [ Package['serverbackup-enterprise'], Package['idera-java'], ],
+	notify			=> Service['cdp-server'],
+} ->
+java_ks { 'cdp': 
+	ensure 			=> absent,
+	target       	=> '/usr/sbin/r1soft/conf/keystore',
+	password     	=> 'password',
+	notify			=> Service['cdp-server'], 
+}
+```
+
+You need to make sure that /usr/sbin/r1soft/data/server.pem contains a valid
+certificate and /usr/sbin/r1soft/data/server.key contains a valid private key.
+
+## Agent setup
 
 ```
 class { 'idera::agent': 

@@ -45,6 +45,7 @@ class idera::server(
 		debian, ubuntu: {
 			package { 'serverbackup-enterprise': 
 				ensure => installed,
+				require => [ Apt::Source['idera'], Exec['apt_update'], ]
 			}
 		}
 	}
@@ -81,6 +82,7 @@ class idera::server(
 		ensure => directory,
 		owner => root,
 		group => root,
+		require => Package['serverbackup-enterprise'],
 	} ->
 	exec { 'idera-set-user':
 		path => '/sbin:/bin:/usr/sbin:/usr/bin',
