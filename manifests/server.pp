@@ -1,5 +1,5 @@
 # todo: potentially remove /usr/sbin/r1soft/data/r1backup during the installation
-class idera::server(
+class r1soft::server(
 	$api_enabled = 'true',
 	$page_auto_refresh = 3600,
 	$com_port = 5443,
@@ -33,19 +33,19 @@ class idera::server(
 	$ssl_max_connections = 100,
 	$ssl_keystore = '',
 	
-) inherits idera {
+) inherits r1soft {
 	# make sure the package is installed
 	case $operatingsystem {
 		redhat, centos: {
 			package { 'serverbackup-enterprise': 
 				ensure => installed,
-				require => Yumrepo['idera'],
+				require => Yumrepo['r1soft'],
 			}
 		}
 		debian, ubuntu: {
 			package { 'serverbackup-enterprise': 
 				ensure => installed,
-				require => [ Apt::Source['idera'], Exec['apt_update'], ]
+				require => [ Apt::Source['r1soft'], Exec['apt_update'], ]
 			}
 		}
 	}
@@ -56,7 +56,7 @@ class idera::server(
 		owner => root,
 		group => root,
 		mode => 600,
-		content => template('idera/server.properties'),
+		content => template('r1soft/server.properties'),
 		require => Package['serverbackup-enterprise'],
 		notify	=> Service['cdp-server'],
 	}
@@ -65,7 +65,7 @@ class idera::server(
 		owner => root,
 		group => root,
 		mode => 644,
-		content => template('idera/web.properties'),
+		content => template('r1soft/web.properties'),
 		require => Package['serverbackup-enterprise'],
 		notify	=> Service['cdp-server'],
 	}
@@ -84,7 +84,7 @@ class idera::server(
 		group => root,
 		require => Package['serverbackup-enterprise'],
 	} ->
-	exec { 'idera-set-user':
+	exec { 'r1soft-set-user':
 		path => '/sbin:/bin:/usr/sbin:/usr/bin',
 		command => '/usr/bin/r1soft-setup --user admin --pass admin; touch /usr/sbin/r1soft/data/passwordset',
 		creates => '/usr/sbin/r1soft/data/passwordset',

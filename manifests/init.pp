@@ -1,20 +1,20 @@
-class idera { 
+class r1soft { 
 	case $operatingsystem {
 		redhat, centos: {
-			yumrepo { 'idera':
+			yumrepo { 'r1soft':
 				baseurl 	=> 'http://repo.r1soft.com/yum/stable/$basearch/',
-				descr 		=> 'Idera Repository Server',
+				descr 		=> 'R1Soft Server Backup Manager Repository',
 				enabled 	=> 1,
 				gpgcheck 	=> 0,
-				name 		=> 'idera',
+				name 		=> 'r1soft',
 			}
 
 			# Set the right java package, this can be used later on with java_ks
 			$java_package = "java-1.6.0-openjdk-devel"
 		}
 		debian, ubuntu: {
-			apt::source { 'idera':
-				comment		=> 'Idera Repository Server',
+			apt::source { 'r1soft':
+				comment		=> 'R1Soft Server Backup Manager Repository',
 				location	=> 'http://repo.r1soft.com/apt',
 				release 	=> 'stable',
 				repos		=> 'main',
