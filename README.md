@@ -45,7 +45,7 @@ package { 'r1soft-java':
 	name			=> $::r1soft::java_package,
 	ensure 			=> installed,
 } ->
-java_ks { 'r1soft:truststore':
+java_ks { 'cdp:truststore':
 	ensure       	=> latest,
 	certificate  	=> '/usr/sbin/r1soft/data/server.pem',
 	private_key		=> '/usr/sbin/r1soft/data/server.key',
@@ -54,12 +54,6 @@ java_ks { 'r1soft:truststore':
 	trustcacerts 	=> true,
 	require 		=> [ Package['serverbackup-enterprise'], Package['r1soft-java'], ],
 	notify			=> Service['cdp-server'],
-} ->
-java_ks { 'cdp': 
-	ensure 			=> absent,
-	target       	=> '/usr/sbin/r1soft/conf/keystore',
-	password     	=> 'password',
-	notify			=> Service['cdp-server'], 
 }
 ```
 
