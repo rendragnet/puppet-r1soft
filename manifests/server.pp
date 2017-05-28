@@ -1,9 +1,9 @@
 # todo: potentially remove /usr/sbin/r1soft/data/r1backup during the installation
 class r1soft::server(
-  $api_enabled = 'true',
+  $api_enabled = bool2str(true),
   $page_auto_refresh = 3600,
   $com_port = 5443,
-  $data_center_use_ssl = 'false',
+  $data_center_use_ssl = bool2str(false),
   $source_ip = '0.0.0.0',
   $task_history_limit = 30,
   $max_running_restore_tasks = 4,
@@ -13,7 +13,7 @@ class r1soft::server(
   $disk_safe_soft_heap_limit = 167772160,
   $hard_quota = 4,
   $soft_quota = 5,
-  $close_all_disk_safes_on_start_up = 'false',
+  $close_all_disk_safes_on_start_up = bool2str(false),
   $cdp_stats_update_frequency = 1,
   $agent_network_connection_timeout = 1800,
   $disk_safe_cache_max_idle_time = 180,
@@ -24,11 +24,11 @@ class r1soft::server(
   $smtp_default_return_address = '',
   $smtp_password = '',
 
-  $http_enabled = 'true',
+  $http_enabled = bool2str(true),
   $http_port = 80,
   $http_max_connections = 100,
 
-  $ssl_enabled = 'false',
+  $ssl_enabled = bool2str(false),
   $ssl_port = 443,
   $ssl_max_connections = 100,
   $ssl_keystore = '',
