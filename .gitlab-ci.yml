@@ -1,0 +1,98 @@
+.test-commands: &test-commands
+  script:
+    - bundle install --path vendor/bundle --without development
+    - bundle exec rake test
+  before_script:
+    - gem update --system
+    # Install ssh-agent if not already installed, it is required by Docker.
+    # (change apt-get to yum if you use a CentOS-based image)
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    # Run ssh-agent (inside the build environment)
+    - eval $(ssh-agent -s)
+    # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    # For Docker builds disable host key checking. Be aware that by adding that
+    # you are suspectible to man-in-the-middle attacks.
+    # WARNING: Use this only with the Docker executor, if you use it with shell
+    # you will overwrite your user's SSH config.
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  coverage: '/^Resource\scoverage\s*:\s*([^%]+)/'
+
+# Ruby 1.9.3
+test:ruby193-puppet-370:
+  <<: *test-commands
+  image: ruby:1.9.3-wheezy
+  variables:
+    PUPPET_VERSION: "~> 3.7.0"
+
+test:ruby193-puppet-380:
+  <<: *test-commands
+  image: ruby:1.9.3-wheezy
+  variables:
+    PUPPET_VERSION: "~> 3.8.0"
+    FUTURE_PARSER: "yes"
+
+test:ruby193-puppet-460:
+  <<: *test-commands
+  image: ruby:1.9.3-wheezy
+  variables:
+    PUPPET_VERSION: "~> 4.6.0"
+
+test:ruby193-puppet-470:
+  <<: *test-commands
+  image: ruby:1.9.3-wheezy
+  variables:
+    PUPPET_VERSION: "~> 4.7.0"
+
+# Ruby 2.0
+test:ruby20-puppet-370:
+  <<: *test-commands
+  image: ruby:2.0
+  variables:
+    PUPPET_VERSION: "~> 3.7.0"
+
+test:ruby20-puppet-380:
+  <<: *test-commands
+  image: ruby:2.0
+  variables:
+    PUPPET_VERSION: "~> 3.8.0"
+    FUTURE_PARSER: "yes"
+
+test:ruby20-puppet-460:
+  <<: *test-commands
+  image: ruby:2.0
+  variables:
+    PUPPET_VERSION: "~> 4.6.0"
+
+test:ruby20-puppet-470:
+  <<: *test-commands
+  image: ruby:2.0
+  variables:
+    PUPPET_VERSION: "~> 4.7.0"
+
+# Ruby 2.1
+test:ruby21-puppet-370:
+  <<: *test-commands
+  image: ruby:2.1
+  variables:
+    PUPPET_VERSION: "~> 3.7.0"
+
+test:ruby21-puppet-380:
+  <<: *test-commands
+  image: ruby:2.1
+  variables:
+    PUPPET_VERSION: "~> 3.8.0"
+    FUTURE_PARSER: "yes"
+
+test:ruby21-puppet-460:
+  <<: *test-commands
+  image: ruby:2.1
+  variables:
+    PUPPET_VERSION: "~> 4.6.0"
+
+test:ruby21-puppet-470:
+  <<: *test-commands
+  image: ruby:2.1
+  variables:
+    PUPPET_VERSION: "~> 4.7.0"

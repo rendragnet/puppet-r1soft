@@ -1,0 +1,11 @@
+fixtures:
+  repositories:
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+  forge_modules:
+    apt:
+      repo: 'puppetlabs/apt'
+      ref: '2.2.1'
+    java_ks:
+      repo: 'puppetlabs/java_ks'
+  symlinks:
+    r1soft: "#{source_dir}"
