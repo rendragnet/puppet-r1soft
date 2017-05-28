@@ -1,5 +1,7 @@
 # R1Soft
 
+[![Build Status](https://travis-ci.org/sensson/puppet-r1soft.svg?branch=master)](https://travis-ci.org/sensson/puppet-r1soft) [![Puppet Forge](https://img.shields.io/puppetforge/v/sensson/r1soft.svg?maxAge=2592000?style=plastic)](https://forge.puppet.com/sensson/r1soft)
+
 WARNING: This module has been renamed from sensson-idera to puppet-r1soft.
 
 This module can install both an R1Soft Server Backup Manager server as an 
@@ -72,3 +74,40 @@ class { 'r1soft::agent':
 
 The init file only contains the repositories for now. You need to be specific
 in what you want to install.
+
+## Development
+
+We strongly believe in the power of open source. This module is our way
+of saying thanks.
+
+This module is tested against the Ruby versions from Puppet's support
+matrix. Please make sure you have a supported version of Ruby installed.
+
+If you want to contribute please:
+
+1. Fork the repository.
+2. Run tests. It's always good to know that you can start with a clean slate.
+3. Add a test for your change.
+4. Make sure it passes.
+5. Push to your fork and submit a pull request.
+
+We can only accept pull requests with passing tests.
+
+To install all of its dependencies please run:
+
+```
+bundle install --path vendor/bundle
+```
+
+### Running unit tests
+
+```
+bundle exec rake test
+```
+
+### Running acceptance tests
+
+The unit tests only verify if the code runs, not if it does exactly
+what we want on a real machine. For this we use Beaker. Beaker will
+start a new virtual machine (using Vagrant) and runs a series of
+simple tests.
