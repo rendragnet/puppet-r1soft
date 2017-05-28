@@ -6,6 +6,7 @@ describe 'r1soft class' do
     it 'should work idempotently with no errors' do
       pp = <<-EOS
       class { 'r1soft': }
+      class { 'r1soft::server': }
       EOS
 
       # Run it twice and test for idempotency
