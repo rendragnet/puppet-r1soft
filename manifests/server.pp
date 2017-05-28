@@ -83,7 +83,7 @@ class r1soft::server(
     path    => '/sbin:/bin:/usr/sbin:/usr/bin',
     command => '/usr/bin/r1soft-setup --user admin --pass admin; touch /usr/sbin/r1soft/data/passwordset',
     creates => '/usr/sbin/r1soft/data/passwordset',
-    require => [ Package['serverbackup-enterprise'], File['/usr/sbin/r1sfot/data/'], ],
+    require => [ Package['serverbackup-enterprise'], File['/usr/sbin/r1soft/data/'], ],
   }
   service { 'cdp-server':
     ensure    => running,
