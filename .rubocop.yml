@@ -22,3 +22,10 @@ Style/WordArray:
 # long text can be when describing a test
 Metrics/BlockLength:
   ExcludedMethods: ['describe', 'context']
+
+# Disable line length checks
+Metrics/LineLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
