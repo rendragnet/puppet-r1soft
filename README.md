@@ -24,16 +24,16 @@ class { 'r1soft': }
 
 ```
 class { 'r1soft::server':
-	api_enabled 				=> 'true',		
+  api_enabled          => 'true',
 
-	http_enabled				=> 'false',
-	http_port					=> 80,
-	http_max_connections		=> 100,
-		
-	ssl_enabled					=> 'true',
-	ssl_port					=> 443,
-	ssl_max_connections			=> 100,
-	ssl_keystore				=> '/usr/sbin/r1soft/conf/keystore',
+  http_enabled         => 'false',
+  http_port            => 80,
+  http_max_connections => 100,
+
+  ssl_enabled          => 'true',
+  ssl_port             => 443,
+  ssl_max_connections  => 100,
+  ssl_keystore         => '/usr/sbin/r1soft/conf/keystore',
 }
 ```
 
@@ -42,18 +42,18 @@ example of its use can be found below:
 
 ```
 package { 'r1soft-java':
-	name			=> $::r1soft::java_package,
-	ensure 			=> installed,
+  name      => $::r1soft::java_package,
+  ensure      => installed,
 } ->
 java_ks { 'cdp:truststore':
-	ensure       	=> latest,
-	certificate  	=> '/usr/sbin/r1soft/data/server.pem',
-	private_key		=> '/usr/sbin/r1soft/data/server.key',
-	target       	=> '/usr/sbin/r1soft/conf/keystore',
-	password     	=> 'password',
-	trustcacerts 	=> true,
-	require 		=> [ Package['serverbackup-enterprise'], Package['r1soft-java'], ],
-	notify			=> Service['cdp-server'],
+  ensure       => latest,
+  certificate  => '/usr/sbin/r1soft/data/server.pem',
+  private_key  => '/usr/sbin/r1soft/data/server.key',
+  target       => '/usr/sbin/r1soft/conf/keystore',
+  password     => 'password',
+  trustcacerts => true,
+  require      => [ Package['serverbackup-enterprise'], Package['r1soft-java'], ],
+  notify       => Service['cdp-server'],
 }
 ```
 
@@ -64,9 +64,9 @@ certificate and /usr/sbin/r1soft/data/server.key contains a valid private key.
 
 ```
 class { 'r1soft::agent': 
-	r1soft_server_ip			=> '192.168.128.1',
-	r1soft_server_port			=> '1167',
-	r1soft_server_https			=> 'on',
+  r1soft_server_ip    => '192.168.128.1',
+  r1soft_server_port  => '1167',
+  r1soft_server_https => 'on',
 }
 ```
 
