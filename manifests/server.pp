@@ -94,12 +94,16 @@ class r1soft::server(
 
   if defined(Class['csf']) {
     # enable some ports, such as the API port etc.
-    csf::ipv4::input { 'r1soft-input':
-      port => [ $ssl_port, $http_port, $com_port, '1167', '9443' ],
+    csf::ipv4::input { 'r1soft-ssl-port':
+      port => $ssl_port,
     }
+    csf::ipv4::input { 'r1soft-http-port':
+      port => $http_port,
+    }
+    csf::ipv4::input { '1167': }
+    csf::ipv4::input { '9443': }
 
-    csf::ipv4::output { 'r1soft-output':
-      port => [ '1167', '3306' ],
-    }
+    csf::ipv4::output { '1167': }
+    csf::ipv4::output { '3306': }
   }
 }

@@ -61,7 +61,9 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
 
     # open the right port
     if defined(Class['csf']) {
-      csf::ipv4::input { $r1soft_server_port: }
+      csf::ipv4::input { 'r1soft-server-port':
+        port => $r1soft_server_port,
+      }
     }
   }
 }
