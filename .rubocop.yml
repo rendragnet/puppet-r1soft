@@ -29,3 +29,7 @@ Metrics/LineLength:
 
 Metrics/BlockLength:
   Enabled: false
+
+# Disable MixinUsage
+Style/MixinUsage:
+  Enabled: false
