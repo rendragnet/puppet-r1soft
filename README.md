@@ -4,7 +4,7 @@
 
 WARNING: This module has been renamed from sensson-idera to puppet-r1soft.
 
-This module can install both an R1Soft Server Backup Manager server as an 
+This module can install both an R1Soft Server Backup Manager server as an
 R1Soft Server Backup agent.
 
 ## Examples
@@ -23,6 +23,16 @@ class { 'r1soft': }
 ```
 
 ## Server Backup Manager setup
+
+```
+class { 'r1soft::server': manage_properties => false, }
+```
+
+The current default is to manage settings by specifying parameters in the
+class declaration. This has been deprecated in version 0.1.8 and we recommend
+to switch to the new `r1soft::config` class or `r1soft::server::web_settings`
+and `r1soft::server::server_settings` Hiera resource instead. For this you need
+to set `manage_properties` to `false` as shown in the example above.
 
 ```
 class { 'r1soft::server':
@@ -44,8 +54,8 @@ example of its use can be found below:
 
 ```
 package { 'r1soft-java':
-  name      => $::r1soft::java_package,
-  ensure      => installed,
+  name   => $::r1soft::java_package,
+  ensure => installed,
 } ->
 java_ks { 'cdp:truststore':
   ensure       => latest,
@@ -65,7 +75,7 @@ certificate and /usr/sbin/r1soft/data/server.key contains a valid private key.
 ## Agent setup
 
 ```
-class { 'r1soft::agent': 
+class { 'r1soft::agent':
   r1soft_server_ip    => '192.168.128.1',
   r1soft_server_port  => '1167',
   r1soft_server_https => 'on',
