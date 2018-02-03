@@ -36,16 +36,16 @@ class r1soft::server(
 ) inherits r1soft {
   # make sure the package is installed
   case $::operatingsystem {
-    redhat, centos: {
+    'redhat', 'centos': {
       package { 'serverbackup-enterprise':
         ensure  => installed,
         require => Yumrepo['r1soft'],
       }
     }
-    debian, ubuntu: {
+    'debian', 'ubuntu': {
       package { 'serverbackup-enterprise':
         ensure  => installed,
-        require => [ Apt::Source['r1soft'], Exec['apt_update'], ]
+        require => [ Apt::Source['r1soft'], Exec['apt_update'], ],
       }
     }
     default: {
