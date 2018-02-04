@@ -1,5 +1,6 @@
 # todo: potentially remove /usr/sbin/r1soft/data/r1backup during the installation
 class r1soft::server(
+  $manage_properties_templates = bool2str(true),
   $api_enabled = bool2str(true),
   $page_auto_refresh = 3600,
   $com_port = 5443,
@@ -36,16 +37,16 @@ class r1soft::server(
 ) inherits r1soft {
   # make sure the package is installed
   case $::operatingsystem {
-    redhat, centos: {
+    'redhat', 'centos': {
       package { 'serverbackup-enterprise':
         ensure  => installed,
         require => Yumrepo['r1soft'],
       }
     }
-    debian, ubuntu: {
+    'debian', 'ubuntu': {
       package { 'serverbackup-enterprise':
         ensure  => installed,
-        require => [ Apt::Source['r1soft'], Exec['apt_update'], ]
+        require => [ Apt::Source['r1soft'], Exec['apt_update'], ],
       }
     }
     default: {
@@ -54,23 +55,28 @@ class r1soft::server(
   }
 
   # set up our configurations
-  file { '/usr/sbin/r1soft/conf/server.properties':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0600',
-    content => template('r1soft/server.properties'),
-    require => Package['serverbackup-enterprise'],
-    notify  => Service['cdp-server'],
-  }
-  file { '/usr/sbin/r1soft/conf/web.properties':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('r1soft/web.properties'),
-    require => Package['serverbackup-enterprise'],
-    notify  => Service['cdp-server'],
+  # Deprecated since 0.1.8, will be removed in 0.2.0
+  if $manage_properties_templates {
+    notify { 'manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.': }
+
+    file { '/usr/sbin/r1soft/conf/server.properties':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      content => template('r1soft/server.properties'),
+      require => Package['serverbackup-enterprise'],
+      notify  => Service['cdp-server'],
+    }
+    file { '/usr/sbin/r1soft/conf/web.properties':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('r1soft/web.properties'),
+      require => Package['serverbackup-enterprise'],
+      notify  => Service['cdp-server'],
+    }
   }
 
   file { '/usr/sbin/r1soft/data/':
@@ -91,6 +97,12 @@ class r1soft::server(
     hasstatus => true,
     require   => [ Package['serverbackup-enterprise'], Exec['r1soft-set-user'], ],
   }
+
+  # Set up Hiera
+  $r1soft_web_settings = hiera('r1soft::web_settings', {})
+  $r1soft_server_settings = hiera('r1soft::server_settings', {})
+  create_resources(r1soft::config, $r1soft_web_settings, { 'target' => 'web' })
+  create_resources(r1soft::config, $r1soft_server_settings, { 'target' => 'server' })
 
   if defined(Class['csf']) {
     # enable some ports, such as the API port etc.
