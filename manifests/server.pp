@@ -1,6 +1,6 @@
 # todo: potentially remove /usr/sbin/r1soft/data/r1backup during the installation
 class r1soft::server(
-  $manage_properties = bool2str(true),
+  $manage_properties_templates = bool2str(true),
   $api_enabled = bool2str(true),
   $page_auto_refresh = 3600,
   $com_port = 5443,
@@ -56,9 +56,8 @@ class r1soft::server(
 
   # set up our configurations
   # Deprecated since 0.1.8, will be removed in 0.2.0
-  if $manage_properties {
-    notify { 'manage_properties is deprecated and will be removed in 0.2.0.': }
-    notify { 'Please use r1soft::config instead.': }
+  if $manage_properties_templates {
+    notify { 'manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.': }
 
     file { '/usr/sbin/r1soft/conf/server.properties':
       ensure  => present,
@@ -100,8 +99,8 @@ class r1soft::server(
   }
 
   # Set up Hiera
-  $r1soft_web_settings = hiera('r1soft::server::web_settings', {})
-  $r1soft_server_settings = hiera('r1soft::server::server_settings', {})
+  $r1soft_web_settings = hiera('r1soft::web_settings', {})
+  $r1soft_server_settings = hiera('r1soft::server_settings', {})
   create_resources(r1soft::config, $r1soft_web_settings, { 'target' => 'web' })
   create_resources(r1soft::config, $r1soft_server_settings, { 'target' => 'server' })
 

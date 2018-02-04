@@ -25,15 +25,15 @@ class { 'r1soft': }
 ## Server Backup Manager setup
 
 ```
-class { 'r1soft::server': manage_properties => false, }
+class { 'r1soft::server': manage_properties_templates => false, }
 ```
 
 The current default is to manage settings by specifying parameters in the
 class declaration. This has been deprecated in version 0.1.8 and we recommend
 to switch to the new `r1soft::config` defined resource or the latest Hiera
-create_resources for `r1soft::server::web_settings` and
-`r1soft::server::server_settings` instead. For this you need
-to set `manage_properties` to `false` as shown in the example above.
+create_resources for `r1soft::web_settings` and `r1soft::server_settings`
+instead. For this you need to set `manage_properties_templates` to `false`
+as shown in the example above.
 
 ```
 class { 'r1soft::server':

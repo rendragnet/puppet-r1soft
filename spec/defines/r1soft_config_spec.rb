@@ -23,7 +23,7 @@ describe 'r1soft::config' do
 
         context 'r1soft::config with manage_properties set to true' do
           let(:pre_condition) do
-            'class { "::r1soft::server": manage_properties => true }'
+            'class { "::r1soft::server": manage_properties_templates => true }'
           end
 
           let(:title) do
@@ -43,7 +43,7 @@ describe 'r1soft::config' do
 
         context 'r1soft::config with manage_properties set to false' do
           let(:pre_condition) do
-            'class { "::r1soft::server": manage_properties => false }'
+            'class { "::r1soft::server": manage_properties_templates => false }'
           end
 
           let(:title) do
@@ -66,7 +66,7 @@ describe 'r1soft::config' do
 
         context 'r1soft::config manage web.properties' do
           let(:pre_condition) do
-            'class { "::r1soft::server": manage_properties => false }'
+            'class { "::r1soft::server": manage_properties_templates => false }'
           end
 
           let(:title) do

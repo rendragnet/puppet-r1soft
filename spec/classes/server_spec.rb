@@ -45,19 +45,17 @@ describe 'r1soft::server' do
           it { is_expected.to contain_service('cdp-server').with_enable('true') }
 
           # Deprecation notice
-          it { is_expected.to contain_notify('manage_properties is deprecated and will be removed in 0.2.0.') }
-          it { is_expected.to contain_notify('Please use r1soft::config instead.') }
+          it { is_expected.to contain_notify('manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.') }
         end
 
-        context 'disable manage_properties' do
+        context 'disable manage_properties_templates' do
           let(:params) do
             {
-              manage_properties: false
+              manage_properties_templates: false
             }
           end
 
-          it { is_expected.not_to contain_notify('manage_properties is deprecated and will be removed in 0.2.0.') }
-          it { is_expected.not_to contain_notify('Please use r1soft::config instead.') }
+          it { is_expected.not_to contain_notify('manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.') }
         end
       end
     end

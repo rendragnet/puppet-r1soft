@@ -5,7 +5,7 @@ define r1soft::config($ensure = 'present', $value = '', $target = 'server') {
     fail('value can\'t be empty')
   }
 
-  if $::r1soft::server::manage_properties {
+  if $::r1soft::server::manage_properties_templates {
     fail('You can\'t use manage_properties together with r1soft::config')
   }
 
