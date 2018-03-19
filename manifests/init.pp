@@ -7,6 +7,7 @@ class r1soft {
         descr         => 'R1Soft Server Backup Manager Repository',
         enabled       => 1,
         name          => 'r1soft',
+        gpgcheck      => 0,
         repo_gpgcheck => 1,
         gpgkey        => 'http://repo.r1soft.com/r1soft.asc',
       }
