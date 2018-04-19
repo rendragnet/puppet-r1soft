@@ -51,12 +51,20 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
         command => '/usr/bin/serverbackup-setup --get-module; /sbin/service cdp-agent restart',
         unless  => "/sbin/lsmod | grep -q 'hcpdriver'",
         require => Package['serverbackup-enterprise-agent'],
+        notify  => Service['cdp-agent'],
       }
       exec { 'r1soft-get-key':
         command => "/usr/bin/serverbackup-setup --get-key ${urlprefix}://${r1soft_server_ip}",
         unless  => "/usr/bin/serverbackup-setup --list-keys | grep -q '${r1soft_server_ip}'",
         require => [ Package['serverbackup-enterprise-agent'], Exec['r1soft-get-module'] ],
       }
+    }
+
+    # enable the service
+    service { 'cdp-agent':
+      ensure  => running,
+      enable  => true,
+      require => Package['serverbackup-enterprise-agent'],
     }
 
     # open the right port
