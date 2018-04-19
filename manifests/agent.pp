@@ -59,10 +59,12 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
         require => [ Package['serverbackup-enterprise-agent'], Exec['r1soft-get-module'] ],
       }
     }
+
     # enable the service
     service { 'cdp-agent':
-      ensure => running,
-      enable => true,
+      ensure  => running,
+      enable  => true,
+      require => Package['serverbackup-enterprise-agent'],
     }
 
     # open the right port
