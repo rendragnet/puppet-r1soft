@@ -17,15 +17,18 @@ class r1soft {
     }
     'debian', 'ubuntu': {
       apt::source { 'r1soft':
-        comment     => 'R1Soft Server Backup Manager Repository',
-        location    => 'http://repo.r1soft.com/apt',
-        release     => 'stable',
-        repos       => 'main',
-        include_src => false,
-        key         => '66BD1D82',
-        key_source  => 'http://repo.r1soft.com/r1soft.asc',
+        comment  => 'R1Soft Server Backup Manager Repository',
+        location => 'http://repo.r1soft.com/apt',
+        release  => 'stable',
+        repos    => 'main',
+        include  => {
+          src => false,
+        },
+        key      => {
+          id     => '66BD1D82',
+          source => 'http://repo.r1soft.com/r1soft.asc',
+        },
       }
-
       # Set the right java package, this can be used later on with java_ks
       $java_package = 'openjdk-7-jre-headless'
     }
