@@ -19,11 +19,10 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
       }
     }
 
-    if $r1soft_server_https == 'off' {
-      $urlprefix = 'http'
-    }
-    if $r1soft_server_https == 'on' {
-      $urlprefix = 'https'
+    $urlprefix = $r1soft_server_https ? {
+      'on'      => 'https',
+      'off'     => 'http',
+      'default' => 'http',
     }
 
     # only do this if its a physical server

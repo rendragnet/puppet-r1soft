@@ -25,7 +25,7 @@ class r1soft {
           src => false,
         },
         key      => {
-          id     => '66BD1D82',
+          id     => '12C9C3F52909509BDBCDE12639A4965166BD1D82',
           source => 'http://repo.r1soft.com/r1soft.asc',
         },
       }

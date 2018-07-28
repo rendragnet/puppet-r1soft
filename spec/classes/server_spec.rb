@@ -45,7 +45,7 @@ describe 'r1soft::server' do
           it { is_expected.to contain_service('cdp-server').with_enable('true') }
 
           # Deprecation notice
-          it { is_expected.to contain_notify('manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.') }
+          it { is_expected.to contain_notify('manage_properties_templates is deprecated and will be removed in 1.2.0. Please use r1soft::config instead.') }
         end
 
         context 'disable manage_properties_templates' do
@@ -55,7 +55,9 @@ describe 'r1soft::server' do
             }
           end
 
-          it { is_expected.not_to contain_notify('manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.') }
+          it { is_expected.to contain_file('/usr/sbin/r1soft/conf/api.properties') }
+          it { is_expected.to contain_file('/usr/sbin/r1soft/conf/api.properties').that_requires('Package[serverbackup-enterprise]') }
+          it { is_expected.not_to contain_notify('manage_properties_templates is deprecated and will be removed in 1.2.0. Please use r1soft::config instead.') }
         end
       end
     end

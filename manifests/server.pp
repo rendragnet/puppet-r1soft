@@ -1,5 +1,8 @@
 # todo: potentially remove /usr/sbin/r1soft/data/r1backup during the installation
 class r1soft::server(
+  Optional[Hash] $web_settings = {},
+  Optional[Hash] $server_settings = {},
+  Optional[Hash] $api_settings = {},
   $manage_properties_templates = bool2str(true),
   $api_enabled = bool2str(true),
   $page_auto_refresh = 3600,
@@ -55,9 +58,9 @@ class r1soft::server(
   }
 
   # set up our configurations
-  # Deprecated since 0.1.8, will be removed in 0.2.0
+  # Deprecated since 0.1.8, will be removed in 1.2.0
   if $manage_properties_templates {
-    notify { 'manage_properties_templates is deprecated and will be removed in 0.2.0. Please use r1soft::config instead.': }
+    notify { 'manage_properties_templates is deprecated and will be removed in 1.2.0. Please use r1soft::config instead.': }
 
     file { '/usr/sbin/r1soft/conf/server.properties':
       ensure  => present,
@@ -74,6 +77,31 @@ class r1soft::server(
       group   => 'root',
       mode    => '0644',
       content => template('r1soft/web.properties'),
+      require => Package['serverbackup-enterprise'],
+      notify  => Service['cdp-server'],
+    }
+  } else {
+    file { '/usr/sbin/r1soft/conf/server.properties':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0600',
+      require => Package['serverbackup-enterprise'],
+      notify  => Service['cdp-server'],
+    }
+    file { '/usr/sbin/r1soft/conf/web.properties':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => Package['serverbackup-enterprise'],
+      notify  => Service['cdp-server'],
+    }
+    file { '/usr/sbin/r1soft/conf/api.properties':
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       require => Package['serverbackup-enterprise'],
       notify  => Service['cdp-server'],
     }
@@ -99,10 +127,9 @@ class r1soft::server(
   }
 
   # Set up Hiera
-  $r1soft_web_settings = hiera('r1soft::web_settings', {})
-  $r1soft_server_settings = hiera('r1soft::server_settings', {})
-  create_resources(r1soft::config, $r1soft_web_settings, { 'target' => 'web' })
-  create_resources(r1soft::config, $r1soft_server_settings, { 'target' => 'server' })
+  create_resources(r1soft::config, $web_settings, { 'target' => 'web' })
+  create_resources(r1soft::config, $server_settings, { 'target' => 'server' })
+  create_resources(r1soft::config, $api_settings, { 'target' => 'api' })
 
   if defined(Class['csf']) {
     # enable some ports, such as the API port etc.
