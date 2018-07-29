@@ -5,8 +5,8 @@ gem 'facter', '>= 1.7.0'
 gem 'puppet', puppetversion
 gem 'puppet-lint', '>= 1.0.0'
 gem 'puppetlabs_spec_helper', '>= 1.0.0'
-gem 'rspec-puppet'
-gem 'rspec-puppet-facts'
+gem 'rspec-puppet', '<= 2.5.0'
+gem 'rspec-puppet-facts', '< 1.8.0'
 gem 'safe_yaml', '~> 1.0.4'
 gem 'simplecov', require: false
 gem 'simplecov-console', require: false
@@ -16,8 +16,12 @@ if RUBY_VERSION < '2.0.0'
   gem 'metadata-json-lint', '1.1.0'
   gem 'rubocop', '<= 0.41.2'
 else
-  gem 'metadata-json-lint'
-  gem 'rubocop', '>= 0.48.1'
+  gem 'metadata-json-lint', '< 2.0.0'
+  if RUBY_VERSION < '2.2.0'
+    gem 'rubocop', '<= 0.57.2'
+  else
+    gem 'rubocop', '>= 0.58.0'
+  end
 end
 
 group :system_tests do
