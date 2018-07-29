@@ -47,7 +47,7 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
       }
 
       exec { 'r1soft-get-module':
-        command => '/usr/bin/serverbackup-setup --get-module; /sbin/service cdp-agent restart',
+        command => '/usr/bin/serverbackup-setup --get-module',
         unless  => "/sbin/lsmod | grep -q 'hcpdriver'",
         require => Package['serverbackup-enterprise-agent'],
         notify  => Service['cdp-agent'],
