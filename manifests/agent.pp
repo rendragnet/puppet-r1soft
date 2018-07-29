@@ -1,16 +1,23 @@
-class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1soft_server_https = 'off') inherits r1soft {
-  # make sure this doesn't get installed on openvz containers, there's no support for that in r1soft
+class r1soft::agent(
+  $r1soft_server_ip     = undef,
+  $r1soft_server_port   = '1167',
+  $r1soft_server_https  = 'off',
+  $package_ensure       = 'installed',
+  $service_ensure       = 'running',
+) inherits r1soft {
+  # make sure this doesn't get installed on openvz containers, there's no
+  # support for that in r1soft
   if $::virtual != 'openvz' {
     case $::operatingsystem {
       redhat, centos: {
         package { 'serverbackup-enterprise-agent':
-          ensure  => installed,
+          ensure  => $package_ensure,
           require => Yumrepo['r1soft'],
         }
       }
       debian, ubuntu: {
         package { 'serverbackup-enterprise-agent':
-          ensure  => installed,
+          ensure  => $package_ensure,
           require => [ Apt::Source['r1soft'], Exec['apt_update'], ]
         }
       }
@@ -26,7 +33,7 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
     }
 
     # only do this if its a physical server
-    if $r1soft_server_ip != 0 {
+    if $r1soft_server_ip != undef {
       if $::operatingsystem == 'CentOS' {
         if $::virtual == 'openvzhn' {
           if $::operatingsystemmajrelease == '5' {
@@ -41,7 +48,7 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
         }
 
         package { [ $kerneldevel ]:
-          ensure => installed,
+          ensure => $package_ensure,
           before => [ Exec['r1soft-get-module'], Exec['r1soft-get-key'] ],
         }
       }
@@ -61,7 +68,7 @@ class r1soft::agent($r1soft_server_ip = '0', $r1soft_server_port = '1167', $r1so
 
     # enable the service
     service { 'cdp-agent':
-      ensure  => running,
+      ensure  => $service_ensure,
       enable  => true,
       require => Package['serverbackup-enterprise-agent'],
     }
