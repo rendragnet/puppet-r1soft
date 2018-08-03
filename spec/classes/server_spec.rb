@@ -43,9 +43,6 @@ describe 'r1soft::server' do
           it { is_expected.to contain_service('cdp-server') }
           it { is_expected.to contain_service('cdp-server').with_ensure('running') }
           it { is_expected.to contain_service('cdp-server').with_enable('true') }
-
-          # Deprecation notice
-          it { is_expected.to contain_notify('manage_properties_templates is deprecated and will be removed in 1.2.0. Please use r1soft::config instead.') }
         end
 
         context 'disable manage_properties_templates' do
