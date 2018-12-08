@@ -35,8 +35,8 @@ describe 'r1soft::agent::key' do
             }
           end
 
-          it { is_expected.to contain_exec('r1soft-delete-key-10.10.10.10') }
-          it { is_expected.to contain_exec('r1soft-delete-key-10.10.10.10').with_command(/10\.10\.10\.10/) }
+          it { is_expected.to contain_exec('r1soft-remove-key-10.10.10.10') }
+          it { is_expected.to contain_exec('r1soft-remove-key-10.10.10.10').with_command(/10\.10\.10\.10/) }
         end
       end
     end
