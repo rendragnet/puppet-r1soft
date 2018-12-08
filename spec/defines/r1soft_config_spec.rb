@@ -87,6 +87,30 @@ describe 'r1soft::config' do
           it { is_expected.to contain_file_line('r1soft-config-set-web-foobar').with_ensure('present') }
           it { is_expected.to contain_file_line('r1soft-config-set-web-foobar').with_line('foobar=bar') }
         end
+
+        context 'r1soft::config manage api.properties' do
+          let(:pre_condition) do
+            'class { "::r1soft::server": manage_properties_templates => false }'
+          end
+
+          let(:title) do
+            'foobar'
+          end
+
+          let(:params) do
+            {
+              value: 'bar',
+              target: 'api'
+            }
+          end
+
+          it { is_expected.to contain_r1soft__config('foobar').with_value('bar') }
+          it { is_expected.to contain_r1soft__config('foobar').with_target('api') }
+          it { is_expected.to contain_file_line('r1soft-config-set-api-foobar') }
+          it { is_expected.to contain_file_line('r1soft-config-set-api-foobar').with_path('/usr/sbin/r1soft/conf/api.properties') }
+          it { is_expected.to contain_file_line('r1soft-config-set-api-foobar').with_ensure('present') }
+          it { is_expected.to contain_file_line('r1soft-config-set-api-foobar').with_line('foobar=bar') }
+        end
       end
     end
   end

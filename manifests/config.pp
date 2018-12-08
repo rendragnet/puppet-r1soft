@@ -21,6 +21,11 @@ define r1soft::config($ensure = 'present', $value = '', $target = 'server') {
       $service = 'cdp-server'
       $config = '/usr/sbin/r1soft/conf/server.properties'
     }
+    'api': {
+      $package = 'serverbackup-enterprise'
+      $service = 'cdp-server'
+      $config = '/usr/sbin/r1soft/conf/api.properties'
+    }
     default: {
       fail("${target} is not supported")
     }

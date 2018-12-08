@@ -76,15 +76,30 @@ certificate and /usr/sbin/r1soft/data/server.key contains a valid private key.
 ## Agent setup
 
 ```
-class { 'r1soft::agent':
-  r1soft_server_ip    => '192.168.128.1',
-  r1soft_server_port  => '1167',
-  r1soft_server_https => 'on',
-}
+class { 'r1soft::agent': }
 ```
 
 The init file only contains the repositories for now. You need to be specific
 in what you want to install.
+
+## Agent keys
+
+You can set up R1soft keys using both the `r1soft::agent::key` definition or
+via Hiera.
+
+Using `r1soft::agent::key`:
+
+```
+r1soft::agent::key { '10.11.12.13': }
+```
+
+Using Hiera:
+
+```
+r1soft::agent::keys:
+  10.10.10.11:
+    ensure: present
+```
 
 ## Development
 
