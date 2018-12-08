@@ -1,0 +1,5 @@
+r1soft::agent::keys:
+  10.10.10.11:
+    ensure: present
+  10.10.10.12:
+    ensure: absent

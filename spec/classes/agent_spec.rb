@@ -22,6 +22,12 @@ describe 'r1soft::agent' do
           when 'RedHat'
             it { is_expected.to contain_package('kernel-devel') }
           end
+
+          # Hiera -- see data/common.yaml
+          it { is_expected.to contain_r1soft__agent__key('10.10.10.11') }
+          it { is_expected.to contain_r1soft__agent__key('10.10.10.12') }
+          it { is_expected.to contain_exec('r1soft-delete-key-10.10.10.12') }
+          it { is_expected.to contain_exec('r1soft-get-key-10.10.10.11') }
         end
 
         context 'with service not running' do

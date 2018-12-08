@@ -57,4 +57,7 @@ class r1soft::agent(
       require => Package['serverbackup-enterprise-agent'],
     }
   }
+
+  $keys = lookup('r1soft::agent::keys', Hash, 'deep', {})
+  create_resources('r1soft::agent::key', $keys)
 }
