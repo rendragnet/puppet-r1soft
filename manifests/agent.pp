@@ -1,9 +1,6 @@
 class r1soft::agent(
-  $r1soft_server_ip     = undef,
-  $r1soft_server_port   = '1167',
-  $r1soft_server_https  = 'off',
-  $package_ensure       = 'installed',
-  $service_ensure       = 'running',
+  $package_ensure = 'installed',
+  $service_ensure = 'running',
 ) inherits r1soft {
   # make sure this doesn't get installed on openvz containers, there's no
   # support for that in r1soft
@@ -26,44 +23,31 @@ class r1soft::agent(
       }
     }
 
-    $urlprefix = $r1soft_server_https ? {
-      'on'      => 'https',
-      'off'     => 'http',
-      'default' => 'http',
-    }
-
     # only do this if its a physical server
-    if $r1soft_server_ip != undef {
-      if $::operatingsystem == 'CentOS' {
-        if $::virtual == 'openvzhn' {
-          if $::operatingsystemmajrelease == '5' {
-            $kerneldevel = 'ovzkernel-devel'
-          }
-          else {
-            $kerneldevel = 'vzkernel-devel'
-          }
+    if $facts['os']['family'] == 'RedHat' {
+      if $::virtual == 'openvzhn' {
+        if $::operatingsystemmajrelease == '5' {
+          $kerneldevel = 'ovzkernel-devel'
         }
         else {
-          $kerneldevel = 'kernel-devel'
-        }
-
-        package { [ $kerneldevel ]:
-          ensure => $package_ensure,
-          before => [ Exec['r1soft-get-module'], Exec['r1soft-get-key'] ],
+          $kerneldevel = 'vzkernel-devel'
         }
       }
+      else {
+        $kerneldevel = 'kernel-devel'
+      }
 
-      exec { 'r1soft-get-module':
-        command => '/usr/bin/serverbackup-setup --get-module',
-        unless  => "/sbin/lsmod | grep -q 'hcpdriver'",
-        require => Package['serverbackup-enterprise-agent'],
-        notify  => Service['cdp-agent'],
+      package { [ $kerneldevel ]:
+        ensure => $package_ensure,
+        before => [ Exec['r1soft-get-module'] ],
       }
-      exec { 'r1soft-get-key':
-        command => "/usr/bin/serverbackup-setup --get-key ${urlprefix}://${r1soft_server_ip}",
-        unless  => "/usr/bin/serverbackup-setup --list-keys | grep -q '${r1soft_server_ip}'",
-        require => [ Package['serverbackup-enterprise-agent'], Exec['r1soft-get-module'] ],
-      }
+    }
+
+    exec { 'r1soft-get-module':
+      command => '/usr/bin/serverbackup-setup --get-module',
+      unless  => "/sbin/lsmod | grep -q 'hcpdriver'",
+      require => Package['serverbackup-enterprise-agent'],
+      notify  => Service['cdp-agent'],
     }
 
     # enable the service
@@ -71,13 +55,6 @@ class r1soft::agent(
       ensure  => $service_ensure,
       enable  => true,
       require => Package['serverbackup-enterprise-agent'],
-    }
-
-    # open the right port
-    if defined(Class['csf']) {
-      csf::ipv4::input { 'r1soft-server-port':
-        port => $r1soft_server_port,
-      }
     }
   }
 }

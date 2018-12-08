@@ -15,8 +15,13 @@ describe 'r1soft::agent' do
 
           # The main package
           it { is_expected.to contain_package('serverbackup-enterprise-agent').with_ensure('installed') }
-          it { is_expected.not_to contain_exec('r1soft-get-key') }
           it { is_expected.to contain_service('cdp-agent').with_ensure('running') }
+          it { is_expected.to contain_exec('r1soft-get-module') }
+
+          case facts[:osfamily]
+          when 'RedHat'
+            it { is_expected.to contain_package('kernel-devel') }
+          end
         end
 
         context 'with service not running' do
