@@ -17,7 +17,7 @@ describe 'r1soft::agent::key' do
           end
 
           it { is_expected.to contain_exec('r1soft-get-key-10.10.10.10') }
-          it { is_expected.to contain_exec('r1soft-get-key-10.10.10.10').with_command(/https\:\/\/10\.10\.10\.10/) }
+          it { is_expected.to contain_exec('r1soft-get-key-10.10.10.10').with_command(%r{https://10.10.10.10}) }
         end
 
         context 'r1soft::agent::key absent' do
