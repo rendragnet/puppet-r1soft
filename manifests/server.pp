@@ -106,19 +106,4 @@ class r1soft::server(
   create_resources(r1soft::config, $web_settings, { 'target' => 'web' })
   create_resources(r1soft::config, $server_settings, { 'target' => 'server' })
   create_resources(r1soft::config, $api_settings, { 'target' => 'api' })
-
-  if defined(Class['csf']) {
-    # enable some ports, such as the API port etc.
-    csf::ipv4::input { 'r1soft-ssl-port':
-      port => $ssl_port,
-    }
-    csf::ipv4::input { 'r1soft-http-port':
-      port => $http_port,
-    }
-    csf::ipv4::input { '1167': }
-    csf::ipv4::input { '9443': }
-
-    csf::ipv4::output { '1167': }
-    csf::ipv4::output { '3306': }
-  }
 }
