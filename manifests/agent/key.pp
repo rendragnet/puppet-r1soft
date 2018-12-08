@@ -13,8 +13,8 @@ define r1soft::agent::key(
       }
     }
     'absent': {
-      exec { "r1soft-delete-key-${server}":
-        command => "/usr/bin/serverbackup-setup --delete-key ${server}",
+      exec { "r1soft-remove-key-${server}":
+        command => "/usr/bin/serverbackup-setup --remove-key ${server}",
         onlyif  => "/usr/bin/serverbackup-setup --list-keys | grep -q '${server}'",
         require => [ Package['serverbackup-enterprise-agent'] ],
       }
