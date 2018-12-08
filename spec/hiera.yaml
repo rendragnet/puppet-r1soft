@@ -4,4 +4,4 @@
 :hierarchy:
   - common
 :yaml:
-  :datadir: "data"
+  :datadir: "spec/data"
